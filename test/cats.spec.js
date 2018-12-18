@@ -5,6 +5,7 @@ const sinonChai = require('sinon-chai');
 const server = require('../src/server');
 const db = require('../src/db');
 const CatsController = require('../src/controllers');
+const validateCat = require('../src/middlewares');
 
 chai.should();
 chai.use(chaiHttp);
@@ -113,6 +114,22 @@ describe('Cats', () => {
 
       await CatsController.create(req, res);
       expect(res.status).to.have.been.calledWith(500);
+    });
+  });
+
+  describe('Middleware - validateCat()', () => {
+    it('sends 400 when cat name or age is/are not provided', () => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {}
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      const next = () => {};
+
+      validateCat(req, res, next);
+      expect(res.status).to.have.been.calledWith(400);
     });
   });
 });
