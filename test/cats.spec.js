@@ -1,9 +1,16 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
 const server = require('../src/server');
 const db = require('../src/db');
+const CatsController = require('../src/controllers');
+const validateCat = require('../src/middlewares');
 
+chai.should();
 chai.use(chaiHttp);
+chai.use(sinonChai);
+
 const expect = chai.expect;
 let request;
 
@@ -14,7 +21,17 @@ describe('Cats', () => {
     request = chai.request(server).keepOpen();
     await db.set('cats', []).write();
   });
+
+  afterEach(() => sinon.restore());
+
   after(() => request.close());
+
+  it('hit api base url', async () => {
+    const response = await request.get('/api');
+
+    expect(response.status).to.equal(200);
+    expect(response.body).to.have.property('greet', 'Saluton Mundo!');
+  });
 
   it('should get all cats', async () => {
     const response = await request.get('/api/cats');
