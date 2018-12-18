@@ -80,5 +80,20 @@ describe('Cats', () => {
       await CatsController.findOne(req, res);
       expect(res.status).to.have.been.calledWith(404);
     });
+
+    it('fakes server error getting a cat by ID', async () => {
+      const req = { params: { id: 1 } };
+      const res = {
+        status() {},
+        send() {}
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(db, 'get').returnsThis();
+      sinon.stub(db, 'find').throws();
+
+      await CatsController.findOne(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    });
   });
 });
