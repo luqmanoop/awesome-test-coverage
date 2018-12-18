@@ -95,5 +95,24 @@ describe('Cats', () => {
       await CatsController.findOne(req, res);
       expect(res.status).to.have.been.calledWith(500);
     });
+
+    it('fakes server error creating a cat', async () => {
+      const req = {
+        body: {
+          name: 'fido',
+          age: 3
+        }
+      };
+      const res = {
+        status() {},
+        send() {}
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(db, 'get').throws();
+
+      await CatsController.create(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    });
   });
 });
