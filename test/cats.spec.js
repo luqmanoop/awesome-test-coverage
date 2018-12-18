@@ -64,5 +64,21 @@ describe('Cats', () => {
       await CatsController.findAll(req, res);
       expect(res.status).to.have.been.calledWith(500);
     });
+
+    it('fails to find cat by ID', async () => {
+      const req = { params: { id: 1 } };
+      const res = {
+        status() {},
+        send() {}
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(db, 'get').returnsThis();
+      sinon.stub(db, 'find').returnsThis();
+      sinon.stub(db, 'value').returns(false);
+
+      await CatsController.findOne(req, res);
+      expect(res.status).to.have.been.calledWith(404);
+    });
   });
 });
