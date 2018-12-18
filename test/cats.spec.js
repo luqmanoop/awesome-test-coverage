@@ -1,9 +1,15 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
 const server = require('../src/server');
 const db = require('../src/db');
+const CatsController = require('../src/controllers');
 
+chai.should();
 chai.use(chaiHttp);
+chai.use(sinonChai);
+
 const expect = chai.expect;
 let request;
 
@@ -14,6 +20,9 @@ describe('Cats', () => {
     request = chai.request(server).keepOpen();
     await db.set('cats', []).write();
   });
+
+  afterEach(() => sinon.restore());
+
   after(() => request.close());
 
   it('should get all cats', async () => {
@@ -39,5 +48,21 @@ describe('Cats', () => {
 
     expect(response.status).to.equal(200);
     expect(response.body.cat).to.have.property('id', catId);
+  });
+
+  describe('CatsController', () => {
+    it('fakes server error getting all cats', async () => {
+      const req = {};
+      const res = {
+        status() {},
+        send() {}
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(db, 'get').throws();
+
+      await CatsController.findAll(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    });
   });
 });
