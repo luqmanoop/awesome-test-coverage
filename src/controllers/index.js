@@ -29,7 +29,7 @@ class CatsController {
   }
 
   static async create(req, res) {
-    const { name, age } = req.body;
+    const { name, age } = req.body || {};
     try {
       const id = randomBytes(4).toString('hex');
       const cat = { id, name, age };
