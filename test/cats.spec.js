@@ -131,5 +131,19 @@ describe('Cats', () => {
       validateCat(req, res, next);
       expect(res.status).to.have.been.calledWith(400);
     });
+
+    it('sends 403 if cat age is > 18', () => {
+      const req = { body: { name: 'stuppy', age: 22 } };
+      const res = {
+        status() {},
+        send() {}
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      const next = () => {};
+
+      validateCat(req, res, next);
+      expect(res.status).to.have.been.calledWith(403);
+    });
   });
 });
