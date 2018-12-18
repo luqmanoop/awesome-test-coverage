@@ -1,0 +1,27 @@
+{
+  "name": "test-coverage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "nodemom --watch src --exec node src/server.js",
+    "test": "nyc --reporter=html --reporter=text mocha --recursive --exit"
+  },
+  "keywords": [],
+  "author": "Luqman Olushi <olushilukmon03@gmail.com> (https://codeshifu.github.io/)",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "1.18.3",
+    "cors": "2.8.5",
+    "express": "4.16.4",
+    "lowdb": "1.0.0",
+    "morgan": "1.9.1"
+  },
+  "devDependencies": {
+    "chai": "4.2.0",
+    "chai-http": "4.2.0",
+    "mocha": "5.2.0",
+    "nodemon": "1.18.7",
+    "nyc": "13.1.0"
+  }
+}
