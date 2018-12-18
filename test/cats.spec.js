@@ -26,6 +26,11 @@ describe('Cats', () => {
 
   after(() => request.close());
 
+  it('hits api base url', async () => {
+    const response = await request.get('/api');
+    expect(response.status).to.equal(200);
+  });
+
   it('should get all cats', async () => {
     const response = await request.get('/api/cats');
 
