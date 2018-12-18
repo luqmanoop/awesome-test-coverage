@@ -164,5 +164,19 @@ describe('Cats', () => {
       validateCat(req, res, next);
       expect(res.status).to.have.been.calledWith(403);
     });
+
+    it('spy on next()', () => {
+      const req = { body: { name: 'stuppy', age: 16 } };
+      const res = {
+        status() {},
+        send() {}
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      const next = sinon.spy();
+
+      validateCat(req, res, next);
+      expect(next).to.have.been.calledOnce;
+    });
   });
 });
