@@ -120,6 +120,20 @@ describe('Cats', () => {
       await CatsController.create(req, res);
       expect(res.status).to.have.been.calledWith(500);
     });
+
+    it('cover branches', async () => {
+      const req = {};
+      const res = {
+        status() {},
+        send() {}
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(db, 'get').throws();
+
+      await CatsController.create(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    });
   });
 
   describe('Middleware - validateCat()', () => {
