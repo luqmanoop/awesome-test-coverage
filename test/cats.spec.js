@@ -57,4 +57,6 @@ describe('Cats', () => {
     expect(response.status).to.equal(200);
     expect(response.body.cat).to.have.property('id', catId);
   });
+
+  // ADD CODE HERE
 });
